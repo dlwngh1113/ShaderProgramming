@@ -1,8 +1,11 @@
 #version 450
 
-in vec3 a_Position;
+in vec3 Position;
+in vec3 Position1;
+
+uniform float u_Scale;
 
 void main()
 {
-	gl_Position = vec4(a_Position, 1);
+	gl_Position = vec4(Position * u_Scale, 1);
 }
