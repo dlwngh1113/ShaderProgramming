@@ -3,6 +3,7 @@
 in vec3 a_Position;
 in vec3 a_Velocity;
 in float a_EmitTime;
+in float a_LifeTime;
 
 uniform float u_Time; //누적 시간
 
@@ -20,6 +21,7 @@ void main()
 	}
 	else
 	{
+		newTime = mod(newTime, a_LifeTime);
 		float t = newTime;
 		float tt = newTime * newTime;
 		newPos = newPos + u_Time * a_Velocity + 0.5 * c_Gravity * tt;
