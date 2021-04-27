@@ -12,7 +12,7 @@ in vec4 a_Color;
 uniform float u_Time; //누적 시간
 uniform vec3 u_ExForce;
 
-const vec3 c_Gravity = vec3(0, -2.8, 0);
+const vec3 c_Gravity = vec3(0, -0.8, 0);
 const mat3 c_NV = mat3(0, -1, 0, 1, 0, 0, 0, 0, 0);
 
 out vec4 v_Color;
@@ -49,6 +49,8 @@ void main()
 
 		float intensity  = 1.0 - t / a_LifeTime;
 		color = a_Color * intensity;
+		intensity = sin(2 * 3.14 * t) * 0.5f + 0.5f;
+		color.a = intensity;
 	}
 
 	gl_Position = vec4(newPos, 1);
