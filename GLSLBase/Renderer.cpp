@@ -64,7 +64,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices1), tempVertices1, GL_STATIC_DRAW);
 
-	CreateParticle(50000);
+	CreateParticle(5000);
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -310,7 +310,7 @@ void Renderer::CreateParticle(int count)
 {
 	float* particleVertices = new float[count * (3 + 3 + 1 + 1 + 1 + 1) * 3 * 2];
 	int floatCount = count * (3 + 3 + 1) * 3 * 2;
-	int vertexCount = count * 3 * 2;
+	int vertexCount = count * 3 * 2; 
 
 	int index = 0;
 	float particleSize = 0.01f;
