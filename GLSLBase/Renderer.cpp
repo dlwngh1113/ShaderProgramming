@@ -310,7 +310,7 @@ void Renderer::CreateParticle(int count)
 {
 	float* particleVertices = new float[count * (3 + 3 + 1 + 1 + 1 + 1) * 3 * 2];
 	int floatCount = count * (3 + 3 + 1) * 3 * 2;
-	int vertexCount = count * 3 * 2; 
+	int vertexCount = count * 3 * 2;
 
 	int index = 0;
 	float particleSize = 0.01f;
