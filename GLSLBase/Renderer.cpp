@@ -567,6 +567,9 @@ void Renderer::FSSandBox()
 	GLuint shader = m_FSSandBoxShader;
 	glUseProgram(shader);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	GLuint VBOLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
 	glEnableVertexAttribArray(VBOLocation);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
@@ -590,6 +593,13 @@ void Renderer::FSSandBox()
 
 	GLuint pointsUniform = glGetUniformLocation(shader, "u_Points");
 	glUniform3fv(pointsUniform, 10, points);
+
+	GLuint timeUniform = glGetUniformLocation(shader, "u_Time");
+	glUniform1f(timeUniform, g_Time);
 	
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glDisable(GL_BLEND);
+
+	g_Time += 0.005;
 }

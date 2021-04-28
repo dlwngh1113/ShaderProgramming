@@ -6,6 +6,7 @@ varying vec4 v_Color;
 
 uniform vec3 u_Point;
 uniform vec3 u_Points[10];
+uniform float u_Time;
 
 const vec3 Circle = vec3(0.5, 0.5, 0);
 const float PI = 3.141592;
@@ -46,9 +47,35 @@ vec4 IndicatePoints()
     return returnColor;
 }
 
+vec4 Radar()
+{
+    float d = length(v_Color.rg - vec2(0, 0));
+    vec4 returnColor = vec4(0);
+    returnColor.a = 0.2;
+    float ringRadius = mod(u_Time, 0.7);
+    float radarWidth = 0.08;
+
+    if(d > ringRadius && d < ringRadius + radarWidth)
+    {
+        returnColor = vec4(0.5);
+        for(int i=0;i<10;++i)
+        {
+            float ptDistance = length(u_Points[i].xy - v_Color.rg);
+            if(ptDistance < 0.05)
+            {
+                ptDistance = 0.05 - ptDistance;
+                ptDistance *= 20;
+                returnColor += vec4(ptDistance);
+            }
+        }
+    }
+    return returnColor;
+}
+
 void main()
 {
     //FragColor = CenteredCircle();
     //FragColor = IndicatePoint();
-    FragColor = IndicatePoints();
+    //FragColor = IndicatePoints();
+    FragColor = Radar();
 }
