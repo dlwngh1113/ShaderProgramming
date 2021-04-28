@@ -337,7 +337,7 @@ void Renderer::CreateParticle(int count)
 	for (int i = 0; i < count; ++i)
 	{
 		float randomValueX = 0.f;
-		float randomValueY = 1.f;
+		float randomValueY = 0.f;
 		float randomValueZ = 0.f;
 		float randomValueVX = 1.f;
 		float randomValueVY = 0.f;
@@ -595,6 +595,4 @@ void Renderer::FSSandBox()
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	glDisable(GL_BLEND);
-
-	g_Time += 0.005;
 }

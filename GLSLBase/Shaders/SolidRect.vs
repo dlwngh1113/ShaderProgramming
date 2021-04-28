@@ -12,7 +12,7 @@ in vec4 a_Color;
 uniform float u_Time; //누적 시간
 uniform vec3 u_ExForce;
 
-const vec3 c_Gravity = vec3(0, -2.8, 0);
+const vec3 c_Gravity = vec3(0, -0.8, 0);
 const mat3 c_NV = mat3(0, -1, 0, 1, 0, 0, 0, 0, 0);
 
 out vec4 v_Color;
