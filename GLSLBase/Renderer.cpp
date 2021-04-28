@@ -576,7 +576,8 @@ void Renderer::FSSandBox()
 	GLuint posUniform = glGetUniformLocation(shader, "u_Point");
 	glUniform3f(posUniform, 0.5f, 0.5f, 0.1f);
 
-	float points[] = { -0.5, -0.5, 0.01,
+	float points[] = {
+	-0.5, -0.5, 0.01,
 	-0.4, -0.4, 0.01 ,
 	-0.3, -0.3, 0.01,
 	-0.2, -0.2, 0.01,

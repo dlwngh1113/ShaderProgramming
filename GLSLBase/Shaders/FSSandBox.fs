@@ -40,7 +40,7 @@ vec4 IndicatePoints()
         float d = length(v_Color.rg - u_Points[i].xy);
         if(d < u_Points[i].z)
         {
-            returnColor = vec4(1);
+            returnColor = vec4(1 - d * 100);
         }
     }
     return returnColor;
