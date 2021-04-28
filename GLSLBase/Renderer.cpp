@@ -18,6 +18,8 @@ Renderer::~Renderer()
 {
 }
 
+float g_Points[30] = {};
+
 void Renderer::Initialize(int windowSizeX, int windowSizeY)
 {
 	//Set window size
@@ -27,7 +29,12 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	//Load shaders
 	m_SolidRectShader = CompileShaders("./Shaders/SolidRect.vs", "./Shaders/SolidRect.fs");
 	m_FSSandBoxShader = CompileShaders("./Shaders/FSSandBox.vs", "./Shaders/FSSandBox.fs");
-	
+
+	for (int i = 0; i < 30; ++i)
+	{
+		g_Points[i] = (float)((float)rand() / (float)RAND_MAX) - 0.5f;
+	}
+
 	//Create VBOs
 	CreateVertexBufferObjects();
 
@@ -579,20 +586,8 @@ void Renderer::FSSandBox()
 	GLuint posUniform = glGetUniformLocation(shader, "u_Point");
 	glUniform3f(posUniform, 0.5f, 0.5f, 0.1f);
 
-	float points[] = {
-	-0.5, -0.5, 0.01,
-	-0.4, -0.4, 0.01 ,
-	-0.3, -0.3, 0.01,
-	-0.2, -0.2, 0.01,
-	-0.1, -0.1, 0.01,
-	0.5, 0.5, 0.01,
-	0.4, 0.4, 0.01 ,
-	0.3, 0.3, 0.01,
-	0.2, 0.2, 0.01,
-	0.1, 0.1, 0.01 };
-
 	GLuint pointsUniform = glGetUniformLocation(shader, "u_Points");
-	glUniform3fv(pointsUniform, 10, points);
+	glUniform3fv(pointsUniform, 10, g_Points);
 
 	GLuint timeUniform = glGetUniformLocation(shader, "u_Time");
 	glUniform1f(timeUniform, g_Time);

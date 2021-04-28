@@ -72,10 +72,29 @@ vec4 Radar()
     return returnColor;
 }
 
+vec4 wave()
+{
+    vec4 returnColor = vec4(0);
+
+    for(int i=0;i<10;++i)
+    {
+        vec2 ori = u_Points[i].xy;
+        vec2 pos = v_Color.rg;
+        float dist = length(ori - pos);
+        float prequency = 8;
+
+        returnColor += 0.5 * vec4(sin(dist * 2.0 * PI * prequency - u_Time));
+    }
+
+    //returnColor = normalize(returnColor);
+    return returnColor;
+}
+
 void main()
 {
     //FragColor = CenteredCircle();
     //FragColor = IndicatePoint();
     //FragColor = IndicatePoints();
-    FragColor = Radar();
+    //FragColor = Radar();
+    FragColor = wave();
 }
