@@ -22,6 +22,7 @@ public:
 	   
 	void Test();
 	void Particle();
+	void FSSandBox();
 
 private:
 	void Initialize(int windowSizeX, int windowSizeY);
@@ -52,10 +53,12 @@ private:
 
 	GLuint m_VBORect = 0;
 	GLuint m_SolidRectShader = 0;
+	GLuint m_FSSandBoxShader = 0;
 
 	GLuint m_VBO;
 	GLuint m_VBO1;
 	GLuint m_VBOManyParticle = 0;
 	GLuint m_VBOManyParticleCount = 0;
+	GLuint m_VBOFSSandBox = 0;
 };
 

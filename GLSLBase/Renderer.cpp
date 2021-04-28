@@ -26,6 +26,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	//Load shaders
 	m_SolidRectShader = CompileShaders("./Shaders/SolidRect.vs", "./Shaders/SolidRect.fs");
+	m_FSSandBoxShader = CompileShaders("./Shaders/FSSandBox.vs", "./Shaders/FSSandBox.fs");
 	
 	//Create VBOs
 	CreateVertexBufferObjects();
@@ -63,6 +64,17 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glGenBuffers(1, &m_VBO1);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices1), tempVertices1, GL_STATIC_DRAW);
+
+	float tempVertices2[] = {
+		-0.5f, -0.5f, 0.f, 
+		-0.5f, 0.5f, 0.f, 
+		0.5f, 0.5f, 0.f,
+	-0.5f, -0.5f, 0.f,
+	0.5f, 0.5f, 0.f,
+	0.5f, -0.5f, 0.f};
+	glGenBuffers(1, &m_VBOFSSandBox);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices2), tempVertices2, GL_STATIC_DRAW);
 
 	CreateParticle(5000);
 }
@@ -548,4 +560,35 @@ void Renderer::Particle()
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleCount);
 
 	g_Time += 0.016;
+}
+
+void Renderer::FSSandBox()
+{
+	GLuint shader = m_FSSandBoxShader;
+	glUseProgram(shader);
+
+	GLuint VBOLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	glEnableVertexAttribArray(VBOLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT,
+		GL_FALSE, sizeof(float) * 3, (GLvoid*)0);
+
+	GLuint posUniform = glGetUniformLocation(shader, "u_Point");
+	glUniform3f(posUniform, 0.5f, 0.5f, 0.1f);
+
+	float points[] = { -0.5, -0.5, 0.01,
+	-0.4, -0.4, 0.01 ,
+	-0.3, -0.3, 0.01,
+	-0.2, -0.2, 0.01,
+	-0.1, -0.1, 0.01,
+	0.5, 0.5, 0.01,
+	0.4, 0.4, 0.01 ,
+	0.3, 0.3, 0.01,
+	0.2, 0.2, 0.01,
+	0.1, 0.1, 0.01 };
+
+	GLuint pointsUniform = glGetUniformLocation(shader, "u_Points");
+	glUniform3fv(pointsUniform, 10, points);
+	
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
