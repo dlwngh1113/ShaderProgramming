@@ -18,6 +18,8 @@ Renderer::~Renderer()
 {
 }
 
+float g_Points[30] = {};
+
 void Renderer::Initialize(int windowSizeX, int windowSizeY)
 {
 	//Set window size
@@ -26,7 +28,13 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	//Load shaders
 	m_SolidRectShader = CompileShaders("./Shaders/SolidRect.vs", "./Shaders/SolidRect.fs");
-	
+	m_FSSandBoxShader = CompileShaders("./Shaders/FSSandBox.vs", "./Shaders/FSSandBox.fs");
+
+	for (int i = 0; i < 30; ++i)
+	{
+		g_Points[i] = (float)((float)rand() / (float)RAND_MAX) - 0.5f;
+	}
+
 	//Create VBOs
 	CreateVertexBufferObjects();
 
@@ -63,6 +71,17 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glGenBuffers(1, &m_VBO1);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices1), tempVertices1, GL_STATIC_DRAW);
+
+	float tempVertices2[] = {
+		-0.5f, -0.5f, 0.f, 
+		-0.5f, 0.5f, 0.f, 
+		0.5f, 0.5f, 0.f,
+	-0.5f, -0.5f, 0.f,
+	0.5f, 0.5f, 0.f,
+	0.5f, -0.5f, 0.f};
+	glGenBuffers(1, &m_VBOFSSandBox);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices2), tempVertices2, GL_STATIC_DRAW);
 
 	CreateParticle(5000);
 }
@@ -318,7 +337,7 @@ void Renderer::CreateParticle(int count)
 	for (int i = 0; i < count; ++i)
 	{
 		float randomValueX = 0.f;
-		float randomValueY = 1.f;
+		float randomValueY = 0.f;
 		float randomValueZ = 0.f;
 		float randomValueVX = 1.f;
 		float randomValueVY = 0.f;
@@ -548,4 +567,32 @@ void Renderer::Particle()
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleCount);
 
 	g_Time += 0.016;
+}
+
+void Renderer::FSSandBox()
+{
+	GLuint shader = m_FSSandBoxShader;
+	glUseProgram(shader);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	GLuint VBOLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	glEnableVertexAttribArray(VBOLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT,
+		GL_FALSE, sizeof(float) * 3, (GLvoid*)0);
+
+	GLuint posUniform = glGetUniformLocation(shader, "u_Point");
+	glUniform3f(posUniform, 0.5f, 0.5f, 0.1f);
+
+	GLuint pointsUniform = glGetUniformLocation(shader, "u_Points");
+	glUniform3fv(pointsUniform, 10, g_Points);
+
+	GLuint timeUniform = glGetUniformLocation(shader, "u_Time");
+	glUniform1f(timeUniform, g_Time);
+	
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glDisable(GL_BLEND);
 }
