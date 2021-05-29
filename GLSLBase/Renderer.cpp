@@ -30,6 +30,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	m_SolidRectShader = CompileShaders("./Shaders/SolidRect.vs", "./Shaders/SolidRect.fs");
 	m_FSSandBoxShader = CompileShaders("./Shaders/FSSandBox.vs", "./Shaders/FSSandBox.fs");
 	m_VSGridMeshShader = CompileShaders("./Shaders/VSGridMeshShader.vs", "./Shaders/FSGridMeshShader.fs");
+	m_SimpleTextureShader = CompileShaders("./Shaders/Texture.vs", "./Shaders/Texture.fs");
 
 	for (int i = 0; i < 30; ++i)
 	{
@@ -84,10 +85,45 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices2), tempVertices2, GL_STATIC_DRAW);
 
+	float tempVertices3[] = {
+		-0.5f, -0.5f, 0.f, 0.f, 0.f,
+		-0.5f, 0.5f, 0.f, 0.f, 1.f,
+		0.5f, 0.5f, 0.f, 1.f, 1.f,
+		-0.5f, -0.5f, 0.f, 0.f, 0.f,
+		0.5f, 0.5f, 0.f, 1.f, 1.f,
+		0.5f, -0.5f, 0.f, 1.f, 0.f
+	};
+	glGenBuffers(1, &m_VBORect_PosTex);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect_PosTex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices3), tempVertices3, GL_STATIC_DRAW);
+
 	CreateParticle(5000);
 
 	//Create Grid Mesh
 	CreateGridGeometry();
+}
+
+void Renderer::CreateTextures() 
+{
+	static const GLulong checkerboard[] =
+	{
+		0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000,
+		0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF,
+		0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000,
+		0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF,
+		0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000,
+		0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF,
+		0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000,
+		0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF
+	};
+
+	glGenTextures(1, &m_TextureCheckerBoard);	//그냥 ID만 생성
+	glBindTexture(GL_TEXTURE_2D, m_TextureCheckerBoard);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerboard);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -698,6 +734,28 @@ void Renderer::GridMeshSandBox()
 	glUniform1f(timeUniform, g_Time);
 
 	glDrawArrays(GL_LINES, 0, m_Count_GridGeo);
+
+	g_Time += 0.016;
+}
+
+void Renderer::DrawSimpleTexture()
+{
+	GLuint shader = m_SimpleTextureShader;
+	glUseProgram(shader);
+
+	GLuint VBOLocation = glGetAttribLocation(shader, "a_Position");
+	glEnableVertexAttribArray(VBOLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect_PosTex);
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT,
+		GL_FALSE, sizeof(float) * 5, (GLvoid*)0);
+
+	GLuint AttribTexPos = glGetAttribLocation(shader, "a_TexPos");
+	glEnableVertexAttribArray(AttribTexPos);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect_PosTex);
+	glVertexAttribPointer(AttribTexPos, 2, GL_FLOAT,
+		GL_FALSE, sizeof(float) * 5, (GLvoid*)(sizeof(float) * 3));
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	g_Time += 0.016;
 }

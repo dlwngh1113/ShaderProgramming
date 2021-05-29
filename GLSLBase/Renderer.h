@@ -24,6 +24,7 @@ public:
 	void Particle();
 	void FSSandBox();
 	void GridMeshSandBox();
+	void DrawSimpleTexture();
 
 private:
 	void Initialize(int windowSizeX, int windowSizeY);
@@ -34,6 +35,7 @@ private:
 	unsigned char * Renderer::loadBMPRaw(const char * imagepath, unsigned int& outWidth, unsigned int& outHeight);
 	void CreateParticle(int count);
 	void CreateGridGeometry();
+	void CreateTextures();
 
 	bool m_Initialized = false;
 	
@@ -66,5 +68,9 @@ private:
 
 	GLuint m_Count_GridGeo = 0;
 	GLuint m_VBO_GridGeo = 0;
+
+	GLuint m_SimpleTextureShader = 0;
+	GLuint m_TextureCheckerBoard = 0;
+	GLuint m_VBORect_PosTex = 0;
 };
 
