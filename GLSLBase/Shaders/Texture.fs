@@ -11,13 +11,6 @@ const float PI = 3.141592;
 void main()
 {
 	vec2 newPos = v_TexPos;
-	if(newPos.y > 0.5)
-	{
-		newPos.y = (newPos.y + 0.5) * 2;
-	}
-	else
-	{
-		newPos.y = (-newPos.y - 0.5) * 2;
-	}
+	newPos.y = max(newPos.y, -newPos.y + 1.0) * 2;
 	FragColor = texture(u_TexSampler, newPos);
 }
