@@ -32,6 +32,9 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	m_VSGridMeshShader = CompileShaders("./Shaders/VSGridMeshShader.vs", "./Shaders/FSGridMeshShader.fs");
 	m_SimpleTextureShader = CompileShaders("./Shaders/Texture.vs", "./Shaders/Texture.fs");
 
+	//load Textures
+	m_TextureRGB = CreatePngTexture("../Texture/RGB.png");
+
 	for (int i = 0; i < 30; ++i)
 	{
 		g_Points[i] = (float)((float)rand() / (float)RAND_MAX) - 0.5f;
@@ -754,6 +757,11 @@ void Renderer::DrawSimpleTexture()
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect_PosTex);
 	glVertexAttribPointer(AttribTexPos, 2, GL_FLOAT,
 		GL_FALSE, sizeof(float) * 5, (GLvoid*)(sizeof(float) * 3));
+
+	GLuint uniformTexture = glGetUniformLocation(shader, "u_TexSampler");
+	glUniform1i(uniformTexture, 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_TextureRGB);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 

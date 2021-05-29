@@ -6,9 +6,18 @@ uniform sampler2D u_TexSampler;
 
 in vec2 v_TexPos;
 
+const float PI = 3.141592;
+
 void main()
 {
-	//FragColor = vec4(1); 
-	//texture(u_TexSampler, vTexPos);
-	FragColor = vec4(v_TexPos, 0, 1);
+	vec2 newPos = v_TexPos;
+	if(newPos.y > 0.5)
+	{
+		newPos.y = (newPos.y + 0.5) * 2;
+	}
+	else
+	{
+		newPos.y = (-newPos.y - 0.5) * 2;
+	}
+	FragColor = texture(u_TexSampler, newPos);
 }
