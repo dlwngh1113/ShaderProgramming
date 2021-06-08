@@ -784,9 +784,7 @@ void Renderer::CreateGridGeometry()
 	}
 
 	glGenBuffers(1, &m_VBO_GridGeo);
-
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO_GridGeo);
-
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (pointCountX - 1) * (pointCountY - 1) * 2 * 3 * 3, vertices, GL_STATIC_DRAW);
 }
 
@@ -1051,7 +1049,7 @@ void Renderer::DrawSimpleTexture()
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_FBOTexture_G);
-	glViewport(0, 0, m_WindowSizeX / 2, m_WindowSizeY / 2);
+	glViewport(0, 0, m_WindowSizeX, m_WindowSizeY);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	g_Time += 0.016;

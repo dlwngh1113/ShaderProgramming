@@ -12,6 +12,7 @@ void main()
 
 	float sinValue = 2 * PI * (a_Position.x + 0.5);
 	newPos.x = a_Position.x;
-	newPos.y = a_Position.y + 0.2 * sin(sinValue + u_Time + a_Position.x);
+	newPos.y = a_Position.y + 0.2 * sin(sinValue + u_Time) * 
+	length(a_Position.xy - vec2(-0.5, a_Position.y));
 	gl_Position = vec4(newPos, 1);
 }
