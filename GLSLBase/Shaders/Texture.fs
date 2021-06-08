@@ -27,5 +27,6 @@ void main()
 	//newPos.y = (floor(newPos.x * 3.0) + newPos.y) / 3.0;
 	//newPos.x = fract(newPos.x * 3.0) - 2.0 / 3.0;
 	//FragColor = texture(u_TexSampler, newPos);
-	FragColor = SpriteTexture();
+	//FragColor = SpriteTexture();
+	FragColor = SingleTexture();
 }
