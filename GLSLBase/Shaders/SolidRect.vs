@@ -23,8 +23,12 @@ void main()
 	
 	//vec3 newPos = a_Position;
 	vec3 newPos;
-	newPos.x = a_Position.x + cos(a_randValue * 2 * 3.14) * 0.1;
-	newPos.y = a_Position.y + sin(a_randValue * 2 * 3.14) * 0.1;
+	newPos.x = a_Position.x + cos(a_randValue * 2 * 3.14);
+	newPos.y = a_Position.y + sin(a_randValue * 2 * 3.14);
+
+	newPos.x = a_Position.x + (16 * pow(sin(a_randValue * 2* 3.14), 3)) * 0.03;
+	newPos.y = a_Position.y + (13 * cos(a_randValue * 2* 3.14) - 5 * cos(2 * a_randValue * 2 * 3.14)
+	- 2 * cos(3 * a_randValue * 2 * 3.14) - cos(4 * a_randValue * 2 * 3.14)) * 0.03;
 
 	vec4 color = vec4(0);
 
